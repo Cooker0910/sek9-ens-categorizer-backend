@@ -184,6 +184,12 @@ CORS_ALLOWED_ORIGINS = [
     'http://sek9.com',
     'https://sek9.com',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'http://www.sek9.com',
+    'https://www.sek9.com',
+    'http://sek9.com',
+    'https://sek9.com',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

@@ -37,7 +37,7 @@ def add_or_update_eth(category, value, user_token=None):
       res = is_existing_value(category, value['name'])
       if res is None:
         break
-      print('==== res: ', res)
+      print('==== is_existing_value: ', res)
 
       # Update
       value['objectId'] = res['objectId']
@@ -162,8 +162,8 @@ def scan_categories_by_re(limit=None):
     cat_value = cat.val()
     cat_name = cat_value['name']
     print('\n==== Checking category: ', cat_name)
-    if 'regularExpression' in cat:
-      regExpress = cat['regularExpression']
+    if 'regularExpression' in cat_value:
+      regExpress = cat_value['regularExpression']
       print('==== regExpress: ', regExpress)
       common_scan_category_by_re(cat_name, regExpress, user_token=firebase_user['idToken'], limit=None)
     time.sleep(1)
