@@ -131,7 +131,7 @@ def get_eth_address(name):
   return None, None, None
 
 def scan_ens(name, skip_no_eth=False):
-  eth_values = ETH_DEFAULT_VALUE
+  eth_values = ETH_DEFAULT_VALUE.copy()
   eth_values['name'] = name
 
   # eth_name = f'{name}.eth'
@@ -152,7 +152,6 @@ def scan_ens(name, skip_no_eth=False):
   str_now = cur_time.strftime("%Y-%m-%dT%H:%M:%S.%sZ")
 
   
-
   try:
     resolver = ns.resolver(eth_name)
     print('==== resolver: ', resolver)

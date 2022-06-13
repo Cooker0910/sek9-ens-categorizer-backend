@@ -37,7 +37,7 @@ def add_or_update_eth(category, value, user_token=None):
       res = is_existing_value(category, value['name'])
       if res is None:
         break
-      print('==== e_value: ', e_value)
+      print('==== res: ', res)
 
       # Update
       value['objectId'] = res['objectId']
@@ -60,6 +60,7 @@ def get_names_from_remote_file(category, file_url, user_token=None):
   with open('tmp.csv', 'r') as file:
     reader = csv.reader(file)
     for row in reader:
+      value = None
       ens_name = row[0].lower().replace(' ', '-').replace('(', '').replace(')', '')
       value = scan_ens(ens_name)
       print('==== ens: ', ens_name, value)
