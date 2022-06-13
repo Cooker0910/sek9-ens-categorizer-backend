@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{subject}}</title>
+<style type="text/css">
+  html,
+  body {
+      /* Reset the document's margin values */
+      margin: 0;
+      /* Reset the document's padding values */
+      padding: 0;
+      /* Use the platform's native font as the default */
+      font-family: 'Poppins', sans-serif;
+      /* Define a reasonable base font size */
+      font-size: 12pt;
+      -webkit-print-color-adjust: exact;
+      background-color: #eee;
+      color: #212529;
+  }
+
+  @font-face {
+      font-family: 'Poppins', sans-serif;
+      src: url('fonts/Poppins-Regular.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Medium', sans-serif;
+      src: url('fonts/Poppins-Medium.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins', sans-serif;
+      src: url('fonts/Poppins-Bold.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Black', sans-serif;
+      src: url('fonts/Poppins-Black.ttf');
+  }
+  .container {
+    padding: 1rem;
+  }
+  .text-container {
+    padding: 0.6rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .dental-container {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 15px;
+    display: flex;
+  }
+  .dental-image-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    justify-content: center;
+  }
+  .dental-image {
+    height: 100%;
+    border-radius: 50%;
+  }
+  .dental-title-container {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .dental-title {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: normal;
+    font-size: 15px;
+    padding-right: 1rem;
+    padding-left: 0.5rem;
+  }
+  .dental-title-span {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 15px;
+    color: blue
+  }
+  .receiver-name {
+      font-family: 'Poppins', sans-serif;
+      font-style: italic;
+      font-size: 15px;
+      line-height: 140%;
+      text-align: left;
+      color: #212529;
+  }
+  .message {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 140%;
+    text-align: left;
+    color: #505050;
+  }
+  .paragraph {
+    padding-top: 1rem;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+  }
+  .footer {
+    padding: 0.6rem;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 16px;
+  }
+  .password-link {
+    font-weight: 100;
+    text-align: left;
+    display: inline-block;
+    text-decoration: none;
+    color: #286ed0;
+    padding-top: 1px;
+    padding-bottom: 0.25rem;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .password-container {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 13px;
+    display: flex;
+  }
+  .password-image-container {
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    background-color: #f6d6dc;
+    border-radius: 50%;
+    display: inline-block;
+    justify-content: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .password-image {
+    height: 30px;
+    width: 30px;
+  }
+  .password-title-container {
+    display: inline-block;
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+  }
+  .password-title {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .password-email {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 13px;
+    color: #286ed0;
+  }
+  .footer-title {
+    font-size: 15px;
+    font-weight: 100;
+    font-style: italic;
+    text-align: left;
+    color: #212529;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .footer-image {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 17px;
+    width: 68px;
+    max-width: 68px;
+    max-height: 17px;
+    min-width: 68px;
+    min-height: 17px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="dental-container">
+      <div class="dental-image-container">
+        <img class="dental-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/email/dental-care.png" alt="Dental">
+      </div>
+      <div class="dental-title-container">
+        <div class="dental-title">Bienvenu(e) dans la communauté de praticiens <span class="dental-title-span">Aligneurs Français<span> !</div>
+      </div>
+    </div>
+    <div class="text-container">
+      <div class="receiver-name">{{receiver_name}},</div>
+      <br>
+      <div class="message">Voici vos identifiants pour accéder à l'application Aligneurs Français.</div>
+      <div class="message">Vous pouvez dès à présent commencer vos premiers cas cliniques.</div>
+      <div class="message">N'hésitez pas à nous contacter si vous rencontrez le moindre problème.</div>
+    </div>
+    <div class="password-container">
+      <div class="password-image-container">
+        <img class="password-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/email/verifie.png" alt="">
+      </div>
+      <div class="password-title-container">
+        <div class="password-title">Adresse de l'application :</div>
+        <a class="password-link" href="{{ site_url }}">{{ site_domain }}</a>
+        <div class="paragraph password-desc">
+          <div class="password-title">Identifiants :</div>
+          <div class="password-link">{{ member.email }}</div>
+        </div>
+        <div class="paragraph password-desc">
+          <div class="password-title">Mot de passe :</div>
+          <div class="password-link">{{ member.password }}</div>        
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="paragraph">
+        <p class="footer-title">A très bientôt,</p>
+        <img class="footer-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/app_title_logo.png" alt="Aligneurs Français">
+        <p class="footer-title">Les équipes Aligneurs Français</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

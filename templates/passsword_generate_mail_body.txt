@@ -1,0 +1,11 @@
+Welcome to Aligneursfrancais!
+
+Hi {{ member.first_name }}
+
+We generated your password:{{ member.password }}
+You can login with your email and password on {{ site_url }}
+If you have any problem, please contact us.
+
+Thank you!
+
+Team Aligneursfrancais

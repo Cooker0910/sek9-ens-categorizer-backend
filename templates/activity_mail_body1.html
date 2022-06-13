@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{subject}}</title>
+<style type="text/css">
+  html,
+  body {
+      /* Reset the document's margin values */
+      margin: 0;
+      /* Reset the document's padding values */
+      padding: 0;
+      /* Use the platform's native font as the default */
+      font-family: 'Poppins', sans-serif;
+      /* Define a reasonable base font size */
+      font-size: 12pt;
+      -webkit-print-color-adjust: exact;
+      background-color: #eee;
+      color: #212529;
+  }
+
+  @font-face {
+      font-family: 'Poppins', sans-serif;
+      src: url('fonts/Poppins-Regular.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Medium', sans-serif;
+      src: url('fonts/Poppins-Medium.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins', sans-serif;
+      src: url('fonts/Poppins-Bold.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Black', sans-serif;
+      src: url('fonts/Poppins-Black.ttf');
+  }
+  .container {
+    padding: 1rem
+  }
+  .text-container {
+    padding: 0.6rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .patient-container {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 15px;
+    display: flex;
+  }
+  .patient-image-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    justify-content: center;
+  }
+  .patient-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  .patient-title-container {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .patient-title {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 15px;
+    padding-right: 1rem;
+    padding-left: 0.5rem;
+  }
+  .receiver-name {
+      font-family: 'Poppins', sans-serif;
+      font-style: italic;
+      font-size: 15px;
+      line-height: 140%;
+      text-align: left;
+      color: #212529;
+  }
+  .message {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 140%;
+    text-align: left;
+    color: #212529;
+  }
+  .paragraph {
+    padding-top: 1rem;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+  }
+  .footer {
+    padding: 0.6rem;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 16px;
+  }
+  .activity-link {
+    font-weight: 100;
+    text-align: left;
+    display: inline-block;
+    text-decoration: underline;
+    color: #212529;
+    font-size: 13px;
+    padding-top: 0px;
+    padding-bottom: 0.25rem;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .activity-container {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-size: 13px;
+    display: flex;
+  }
+  .activity-image-container {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+  }
+  .activity-image {
+    height: 30px;
+    width: 30px;
+  }
+  .activity-title-container {
+    display: inline-block;
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .activity-title {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .activity-desc {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 13px;
+    text-decoration: underline;
+  }
+  .activity-link-container {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 13px;
+    padding-top: 0.5rem;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: calc(30px + 0.5rem);
+  }
+  .footer-title {
+    font-weight: 100;
+    font-style: italic;
+    text-align: left;
+    color: #212529;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .footer-image {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 17px;
+    width: 68px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="patient-container">
+      <div class="patient-image-container">
+        <img class="patient-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/email/utilisateur.png" alt="">
+      </div>
+      <div class="patient-title-container">
+        <div class="patient-title">{{patient_name}}</div>
+      </div>
+    </div>
+    <div class="text-container">
+      <div class="receiver-name">{{receiver_name}},</div>
+      <br>
+      <div class="message">{{ act_desc.description }}</div>
+    </div>    
+    <div class="activity-container">
+      <div class="activity-image-container">
+        <img class="activity-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/email/verifie.png" alt="">
+      </div>
+      <div class="activity-title-container">
+        <div class="activity-title">{{ act_desc.title }} le :</div>
+      </div>
+    </div>
+    <div class="activity-link-container">
+      <a class="activity-link" href="{{ activity_link }}">
+        {{ created_at }}.
+      </a>
+      <div class="activity-desc">Patient ID: #{{ patient.id }}</div>
+    </div>
+    <div class="footer">
+      <div class="paragraph">
+        <p class="footer-title">A très bientôt,</p>
+        <img class="footer-image" src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/app_title_logo.png" alt="Aligneurs Français">
+        <p class="footer-title">Les équipes Aligneurs Français</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Activity</title>
+<style type="text/css">
+  html,
+  body {
+      /* Reset the document's margin values */
+      margin: 0;
+      /* Reset the document's padding values */
+      padding: 0;
+      /* Use the platform's native font as the default */
+      font-family: 'Poppins', sans-serif;
+      /* Define a reasonable base font size */
+      font-size: 12pt;
+      -webkit-print-color-adjust: exact;
+      background-color: #eee;
+  }
+
+  @font-face {
+      font-family: 'Poppins', sans-serif;
+      src: url('fonts/Poppins-Regular.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Medium', sans-serif;
+      src: url('fonts/Poppins-Medium.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Bold', sans-serif;
+      src: url('fonts/Poppins-Bold.ttf');
+  }
+  @font-face {
+      font-family: 'Poppins-Black', sans-serif;
+      src: url('fonts/Poppins-Black.ttf');
+  }
+  .title {
+      font-family: 'Poppins-Bold', sans-serif;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 150%;
+      text-align: left;
+      color: #212529;
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+      padding-left: 20px;
+  }
+  .message {
+    font-family: 'Poppins-Bold', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: left;
+    color: #505050;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .focus {
+    font-family: 'Poppins-Bold', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    text-align: left;
+    color: #212529;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .postfix {
+    font-family: 'Poppins-Bold', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: left;
+    color: #212529;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+  }
+</style>
+</head>
+<body>
+<p class="title">{{title}}</p>
+<p class="message">{{description}}</p>
+<p class="message">You can check the patient on {{ site_url }}. Patient ID: <span class="password">#{{ patient.id }}</span></p>
+<p class="postfix">Team Aligneursfrancais</p>
+</body>
+</html>

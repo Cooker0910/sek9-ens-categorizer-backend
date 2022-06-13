@@ -1,0 +1,15 @@
+{{subject}}
+
+{{patient_name}}
+
+{{receiver_name}},
+
+{{ act_desc.description }}
+
+{{ act_desc.title }} le {{created_at}}.
+{{ act_desc.email_link_description }} :
+
+Patient ID: #{{ patient.id }}
+
+A très bientôt,
+Les équipes Aligneurs Français

@@ -1,0 +1,4 @@
+{{title}}
+{{description}}
+You can check the patient on {{ site_url }}. Patient ID: #{{ patient.id }}
+Team Aligneursfrancais

@@ -1,0 +1,560 @@
+{% extends "easy_pdf_l/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+    <style type="text/css">
+    html,
+    body {
+        /* Reset the document's margin values */
+        margin: 0;
+        /* Reset the document's padding values */
+        padding: 0;
+        /* Use the platform's native font as the default */
+        font-family: 'Poppins', sans-serif;
+        /* Define a reasonable base font size */
+        font-size: 12pt;
+        -webkit-print-color-adjust: exact;
+
+        /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+
+        /* Use a non-white background color to make the content areas stick out from the full page box */
+        background-color: #eee;
+    }
+
+    /* Styles that are shared by all elements */
+    * {
+        /* Include the content box as well as padding and border for precise definitions */
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    .page {
+        /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+
+        /* Reflect the paper width in the screen rendering (must match size from @page rule) */
+        width: 21cm;
+        /* Reflect the paper height in the screen rendering (must match size from @page rule) */
+        min-height: 29.7cm;
+
+        /* Reflect the actual page margin/padding on paper in the screen rendering (must match margin from @page rule) */
+        padding-left: 2cm;
+        padding-top: 2cm;
+        padding-right: 2cm;
+        padding-bottom: 2cm;
+        /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+
+        /* Divide single pages with some space and center all pages horizontally */
+        margin: 1cm auto;
+        /* Define a white paper background that sticks out from the darker overall background */
+        background: #fff;
+        /* Show a drop shadow beneath each page */
+        box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+        /* Override outline from user agent stylesheets */
+        outline: 0;
+
+    }
+
+    @page {
+        /* You can only change the size, margins, orphans, widows and page breaks here */
+
+        /* Paper size and page orientation */
+        size: A4 portrait;
+
+        /* Margin per single side of the page */
+        margin-left: 2cm;
+        margin-top: 2cm;
+        margin-right: 2cm;
+        margin-bottom: 2cm;
+    }
+
+    @media screen {
+
+        /* Renders the border and shadow at the bottom of the upper virtual page */
+        div.page-break::before {
+            content: "";
+            display: block;
+            /* Give a sufficient height to this element so that its drop shadow is properly rendered */
+            height: 0.8cm;
+            /* Offset the negative extra margin at the left of the non-pseudo element */
+            margin-left: 0.5cm;
+            /* Offset the negative extra margin at the right of the non-pseudo element */
+            margin-right: 0.5cm;
+            /* Make the bottom area appear as a part of the page margins of the upper virtual page */
+            background-color: #fff;
+            /* Show a drop shadow beneath the upper virtual page */
+            box-shadow: 0 6px 5px rgba(75, 75, 75, 0.2);
+        }
+
+        /* Renders the empty space as a divider between the two virtual pages that are actually two parts of the same page */
+        div.page-break {
+            display: block;
+            /* Assign the intended height plus the height of the pseudo element */
+            height: 1.8cm;
+            /* Apply a negative margin at the left to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
+            margin-left: -2.5cm;
+            /* Apply a negative margin at the right to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
+            margin-right: -2.5cm;
+            /* Create the bottom page margin on the upper virtual page (minus the height of the pseudo element) */
+            margin-top: 1.2cm;
+            /* Create the top page margin on the lower virtual page */
+            margin-bottom: 2cm;
+            /* Let this page appear as empty space between the virtual pages */
+            background: #eee;
+        }
+    }
+
+    @media print {
+
+        html,
+        body {
+            /* Reset the document's background color */
+            background-color: #fff;
+        }
+
+        .page {
+            /* Reset all page styles that have been for better screen appearance only */
+            /* Break cascading by using the !important rule */
+            /* These resets are absolute must-haves for the print styles and the specificity may be higher elsewhere */
+            width: initial !important;
+            min-height: initial !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: initial !important;
+            border-radius: initial !important;
+            background: initial !important;
+            box-shadow: initial !important;
+
+            /* Force page breaks after each .page element of the document */
+            page-break-after: always;
+        }
+    }
+
+    /* start page style */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .title {
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 33px;
+        text-align: left;
+        color: #212529;
+        margin: 0;
+        padding: 0;
+    }
+
+    .ID {
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        opacity: 0.5;
+    }
+
+    .logo {
+        width: 100px;
+        height: 24px;
+    }
+
+    .logo img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .Personal_info {
+        margin-top: 20px;
+    }
+
+    .Personal_info table {
+        width: 100%;
+        text-align: start;
+    }
+
+    .Personal_info table thead tr th {
+        text-align: start;
+        color: #A2A2A2;
+        font-size: 10px;
+        font-family: 'Poppins', sans-serif;
+        line-height: 15px;
+    }
+
+    .Personal_info table tbody tr td {
+        text-align: start;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    hr {
+        opacity: 0.1;
+        margin-top: 15px;
+        border: 1px solid #000000;
+    }
+
+    .Number-section {
+        width: 80%;
+    }
+
+    .Number-section table {
+        width: 100%;
+        text-align: start;
+        border-spacing: 5px 0.8rem;
+    }
+
+    .Number-section table thead tr th {
+        text-align: start;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        opacity: 0.5;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .Number-section table tbody tr td {
+        text-align: start;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        background: rgba(196, 196, 196, 0.1);
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .Number-section__badgin_blue {
+        background: #0B4CFD;
+        border-radius: 4px;
+        width: 17px;
+        height: 17px;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 16px;
+        text-align: center;
+        color: #FFFFFF;
+
+    }
+
+    .Number-section__badgin_gray {
+        background: #D2D2D2;
+        border-radius: 4px;
+        width: 17px;
+        height: 17px;
+        color: #252525;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 16px;
+        text-align: center;
+    }
+
+    .IPR {
+        width: 100%;
+        margin-bottom: 3rem;
+    }
+
+    .IPR .IPR__title {
+        width: 100%;
+
+    }
+
+    .IPR .IPR__title h3 {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        opacity: 0.5;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .IPR__Boxes {
+        width: 100%;
+        /* display: flex; */
+    }
+
+    .inner__box {
+        width: 352px;
+        height: 164px;
+        background: #F9F9F9;
+        border-radius: 5px;
+        margin-right: 19px;
+        padding: 10px;
+    }
+
+    .IPR__Boxes_2 {
+        width: 100%;
+        display: flex;
+    }
+
+    .IPR__Boxes .inner__box .title {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .aligner_title {
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        text-align: start;
+        opacity: 1;
+        padding-top: 20px;
+    }
+
+    .IPR__Boxes .inner__box .title span {
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .IPR__Boxes_2 .inner__box .title span {
+        width: 100%;
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .all__mm_box_1 {
+        display: flex;
+        width: 100%;
+        padding: 0 14px;
+    }
+
+    .all__mm_box_2 {
+        display: flex;
+        width: 100%;
+        padding: 0 14px;
+        justify-content: flex-end;
+
+    }
+
+    .mm_box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        left: 14px;
+        top: -3px;
+        position: relative;
+        /* padding: 0 14px; */
+    }
+
+
+    .mm_box .mm_box_contanier {
+        width: 19px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .mm_box .mm_box_contanier span {
+        color: #09080C;
+        font-weight: normal;
+        font-size: 9px;
+        line-height: 8px;
+        align-self: center;
+    }
+
+    .mm_box_2 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        /* padding: 0 14px; */
+        position: relative;
+        top: -12px;
+        left: 12px;
+    }
+
+    .mm_box_2 .mm_box_contanier {
+        width: 19px;
+        display: flex;
+        flex-direction: column;
+        /* border: 1px solid #ccc; */
+        position: relative;
+        top: 10px;
+    }
+
+    .mm_box_2 .mm_box_contanier span {
+        color: #09080C;
+        font-weight: normal;
+        font-size: 9px;
+        line-height: 8px;
+        align-self: center;
+    }
+
+    .Number_line {
+        width: 20px;
+        height: 6px;
+        /* margin-top: 5px; */
+    }
+
+    .Number_line_2 img {
+        width: 100%;
+        height: auto;
+    }
+
+    .Number_line_2 {
+        width: 20px;
+        height: 6px;
+        margin-bottom: 5px;
+    }
+
+    .Number_line img {
+        width: 100%;
+        height: auto;
+    }
+
+    .bg_blue {
+        background-color: #0B4CFD !important;
+        color: #fff;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ipr_distance {
+        background-color: #FFFFFF !important;
+        color: #000000;
+    }
+
+    .number_box {
+        width: 100%;
+        /* margin-top: 10px; */
+    }
+
+    .number_box table {
+        width: 100%;
+    }
+
+    .number_box table tbody tr td {
+        width: 22px;
+        height: 22px;
+        background-color: #E4E4E5;
+        color: #FFFFFF;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+    }
+
+
+    .Attachments {
+        width: 100%;
+    }
+
+    .Attachments .row_number__1 thead tr th {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #212529;
+        opacity: 0.5;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .Attachments .row_number__1 table tbody tr td {
+        width: 22px;
+        height: 22px;
+        background-color: #E4E4E5;
+        color: #FFFFFF;
+        text-align: center;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<body class="document">
+    <div class="page">
+        <div class="header">
+            <dis class="">
+                <h2 class="title">AF CHECK</h2>
+                <span class="ID">ID {{af_setup.id}}</span>
+            </dis>
+            <div class="logo">
+                <img src="https://aligneursfrancais.s3.eu-west-3.amazonaws.com/logos/Logo.png" alt="" class="">
+            </div>
+        </div>
+        <div class="Personal_info">
+            <table class="">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 25%;">Nom du patient</th>
+                        <th scope="col" style="width: 25%;">Patient ID</th>
+                        <th scope="col" style="width: 25%;">Dentiste</th>
+                        <th scope="col" style="width: 25%;">Type d’empreintes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{patient.full_name}}</td>
+                        <td>#{{patient.id}}</td>
+                        <td>{{dentist.full_name}}</td>
+                        <td>{{material_type}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="Number-section">
+            <table class="">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 45%;">Nombre d’aligneurs</th>
+                        <th class="" scope="col" style="width: 10%;"></th>
+                        <th scope="col" style="width: 45%;">Nombres de RIP</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    <tr>
+                        <td style="display: flex; justify-content: space-between;">Aligneurs supérieurs <span
+                                class="Number-section__badgin_blue">{{upper_aligners}}</span></td>
+                        <td class="" style="background-color: #fff;"></td>
+                        <td style="display: flex; justify-content: space-between;">RIP sur l’arcade supérieure <span
+                                class="Number-section__badgin_gray">{{ipr_uppper_aligners}}</span></td>
+                    </tr>
+                    <tr>
+                        <td style="display: flex; justify-content: space-between;">Aligneurs inférieurs <span
+                                class="Number-section__badgin_blue">{{lower_aligners}}</span></td>
+                        <td class="" style="background-color: #fff;"></td>
+                        <td style="display: flex; justify-content: space-between;">RIP sur l’arcade inférieure <span
+                                class="Number-section__badgin_gray">{{ipr_lower_aligners}}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        {{iprs_tag}}
+        <hr>
+        {{attachments_tag}}
+    </div>
+    <script type="text/javascript">
+		// window.print();
+    </script>
+</body>
+
+{% endblock %}
