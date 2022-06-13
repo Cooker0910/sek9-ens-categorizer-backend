@@ -124,7 +124,7 @@ def get_eth_address(name):
       print('==== Failed the get the address: get_eth_address(): ', error)
   return None, None, None
 
-def scan_ens(name):
+def scan_ens(name, skip_no_eth=False):
   eth_values = ETH_DEFAULT_VALUE
   eth_values['name'] = name
 
@@ -137,6 +137,8 @@ def scan_ens(name):
   eth_address, w3, ns = get_eth_address(eth_name)
 
   if eth_address is None:
+    if skip_no_eth:
+      return None
     return eth_values
 
   # Filled out the result into the firebase db]

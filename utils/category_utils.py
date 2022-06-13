@@ -7,6 +7,8 @@ from urllib import request
 import csv
 import os
 import time
+import rstr
+from utils import exrex
 
 def is_existing_value(cat_name, eth_name):
   try:
@@ -61,6 +63,18 @@ def get_names_from_remote_file(category, file_url):
       time.sleep(2)
   os.remove('tmp.csv')
 
+def get_category_by_name(category_name):
+  # Get categories from Firebase
+  categories = database.child('categories').get()
+  res = None
+  for cat in categories.each():
+    cat_key = cat.key()
+    cat_value = cat.val()
+    cat_name = cat_value['name']
+    if category_name != cat_name:
+      continue
+    res = cat_value
+  return res
 
 def scan_category(category):
   # Get categories from Firebase
@@ -99,3 +113,31 @@ def scan_categories():
         file_url = cf['url']
         print('=== file_url: ', file_url)
         get_names_from_remote_file(cat_name, file_url)
+
+
+def scan_category_by_re(category, limit=None):
+  # Get category from Firebase
+  cat = get_category_by_name(category)
+  regExpress = cat['regularExpression']
+  print('==== regExpress: ', regExpress)
+  if regExpress is None:
+    return None
+
+  # Generate strings matching to RE
+  ens_names = []
+  if limit:
+    ens_names = list(exrex.generate(regExpress, limit=limit))[:limit]
+  else:
+    ens_names = list(exrex.generate(regExpress))
+  print('==== generated eth names: ', len(ens_names))
+  
+  # Scan eth names
+  for ens_name in ens_names:
+    value = scan_ens(ens_name, skip_no_eth=True)
+    print('==== ens: ', ens_name, value)
+    # Save into firebase
+    if value is not None:
+      add_or_update_eth(category, value)
+    time.sleep(2)
+  return None
+
