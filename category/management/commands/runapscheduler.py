@@ -1,8 +1,4 @@
 import logging
-import json
-import stripe
-from datetime import datetime, timedelta
-from typing import NewType, Dict, Any
 from django.conf import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -11,16 +7,28 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 from django.db.models import Q
-from utils import (member_utils)
+from utils.category_utils import (
+  scan_categories,
+  scan_categories_by_re
+)
+
 
 logger = logging.getLogger(__name__)
 
 
-def check_ens_job():
+def check_category_by_file_job():
   # Your job processing logic here...
-  print('==== run check_ens_job.')
-  
+  print('==== run check_category_by_file_job.')
+  scan_categories()
   return
+
+
+def check_category_by_re_job():
+  # Your job processing logic here...
+  print('==== run check_category_by_re_job.')
+  scan_categories_by_re()
+  return
+
 
 # The `close_old_connections` decorator ensures that database connections, that have become
 # unusable or are obsolete, are closed before and after our job has run.
@@ -45,13 +53,23 @@ class Command(BaseCommand):
     scheduler.add_jobstore(DjangoJobStore(), "default")
 
     scheduler.add_job(
-      check_ens_job,
-      trigger=CronTrigger(minute="*/10"),  # Every 1 mins
-      id="check_ens_job",  # The `id` assigned to each job MUST be unique
+      check_category_by_file_job,
+      trigger=CronTrigger(hour="*/2"),  # Every 2 hours
+      id="check_category_by_file_job",  # The `id` assigned to each job MUST be unique
       max_instances=1,
       replace_existing=True,
     )
-    logger.info("Added job 'check_ens_job'.")
+    logger.info("Added job 'check_category_by_file_job'.")
+
+
+    scheduler.add_job(
+      check_category_by_re_job,
+      trigger=CronTrigger(minute="*/4"),  # Every 4 hours
+      id="check_category_by_re_job",  # The `id` assigned to each job MUST be unique
+      max_instances=1,
+      replace_existing=True,
+    )
+    logger.info("Added job 'check_category_by_re_job'.")
 
     scheduler.add_job(
       delete_old_job_executions,

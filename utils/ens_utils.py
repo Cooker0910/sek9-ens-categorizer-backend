@@ -77,6 +77,12 @@ ETH_DEFAULT_VALUE = {
     "objectId": ''
   }
 
+ethScan = etherscan.Client(
+    api_key=ETHER_SCAN_API_KEY_TOKEN,
+    cache_expire_after=5,
+)
+print('==== ethScan: ', ethScan)
+
 def get_eth_address_by_provider(providers, name):
   try:
     w3 = Web3(providers)
@@ -145,11 +151,7 @@ def scan_ens(name, skip_no_eth=False):
   cur_time = datetime.now()
   str_now = cur_time.strftime("%Y-%m-%dT%H:%M:%S.%sZ")
 
-  ethScan = etherscan.Client(
-      api_key=ETHER_SCAN_API_KEY_TOKEN,
-      cache_expire_after=5,
-  )
-  print('==== ethScan: ', ethScan)
+  
 
   try:
     resolver = ns.resolver(eth_name)
@@ -160,9 +162,20 @@ def scan_ens(name, skip_no_eth=False):
   except Exception as error:
     print('==== Failed to get resolver: ', error)
 
+  # Get eth detail values
+  owner = ''
+  balance = 0
+  try:
+    owner = ns.owner(eth_name)
+    print('==== owner: ', owner)
+    balance = w3.eth.get_balance(eth_address)
+    print('==== balance: ', balance)
+  except Exception as error:
+    print('==== Failed to get the detail values: ', error)
+
   eth_values['labelHash'] = eth_address
-  eth_values['owner'] = ns.owner(eth_name)
+  eth_values['owner'] = owner
   eth_values['createdAt'] = str_now
   eth_values['updatedAt'] = str_now
-  eth_values['balance'] = w3.eth.get_balance(eth_address)
+  eth_values['balance'] = balance
   return eth_values
