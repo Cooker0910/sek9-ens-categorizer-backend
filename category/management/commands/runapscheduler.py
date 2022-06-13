@@ -64,7 +64,7 @@ class Command(BaseCommand):
 
     scheduler.add_job(
       check_category_by_re_job,
-      trigger=CronTrigger(minute="*/4"),  # Every 4 hours
+      trigger=CronTrigger(hour="*/4"),  # Every 4 hours
       id="check_category_by_re_job",  # The `id` assigned to each job MUST be unique
       max_instances=1,
       replace_existing=True,
