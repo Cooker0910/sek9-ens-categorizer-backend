@@ -16,3 +16,5 @@ firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 storage = firebase.storage()
 database=firebase.database()
+FIREBASE_AUTH_EMAIL = 'admin@email.com'
+FIREBASE_AUTH_PASSWORD = '123qweasd'

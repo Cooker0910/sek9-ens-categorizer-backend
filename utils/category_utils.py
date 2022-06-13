@@ -2,12 +2,13 @@ from utils.ens_utils import scan_ens
 from utils.firebase_utils import (
   auth,
   database,
+  FIREBASE_AUTH_EMAIL,
+  FIREBASE_AUTH_PASSWORD
 )
 from urllib import request
 import csv
 import os
 import time
-import rstr
 from utils import exrex
 
 def is_existing_value(cat_name, eth_name):
@@ -23,7 +24,7 @@ def is_existing_value(cat_name, eth_name):
     print('==== error: ', error)
   return None
 
-def add_or_update_eth(category, value):
+def add_or_update_eth(category, value, user_token=None):
   try:
     eths = database.child('domains').child('eth').get()
     for e in eths.each():
@@ -40,10 +41,10 @@ def add_or_update_eth(category, value):
 
       # Update
       value['objectId'] = res['objectId']
-      database.child('domains').child('eth').child(e_key).child(res['objectId']).update(value)
+      database.child('domains').child('eth').child(e_key).child(res['objectId']).update(value, user_token)
       return 'updated'
     # Add new category and new eth
-    new_value = database.child('domains').child('eth').child(category).push(value)
+    new_value = database.child('domains').child('eth').child(category).push(value, user_token)
     # Set objectId
     objectId = new_value['name']
     value['objectId'] = objectId
@@ -54,7 +55,7 @@ def add_or_update_eth(category, value):
   return 'failed'
 
 
-def get_names_from_remote_file(category, file_url):
+def get_names_from_remote_file(category, file_url, user_token=None):
   response = request.urlretrieve(file_url, "tmp.csv")
   with open('tmp.csv', 'r') as file:
     reader = csv.reader(file)
@@ -63,7 +64,7 @@ def get_names_from_remote_file(category, file_url):
       value = scan_ens(ens_name)
       print('==== ens: ', ens_name, value)
       # Save into firebase
-      add_or_update_eth(category, value)
+      add_or_update_eth(category, value, user_token=user_token)
       time.sleep(2)
   os.remove('tmp.csv')
 
@@ -120,7 +121,7 @@ def scan_categories():
         get_names_from_remote_file(cat_name, file_url)
 
 
-def common_scan_category_by_re(category_name, reg_express, limit=None):
+def common_scan_category_by_re(category_name, reg_express, user_token=None, limit=None):
   # Check validation
   if (reg_express is None) or (reg_express == ''):
     return None
@@ -139,7 +140,7 @@ def common_scan_category_by_re(category_name, reg_express, limit=None):
     print('==== ens: ', ens_name, value)
     # Save into firebase
     if value is not None:
-      add_or_update_eth(category_name, value)
+      add_or_update_eth(category_name, value, user_token=user_token)
     time.sleep(2)
   return None
 
@@ -152,6 +153,7 @@ def scan_category_by_re(category, limit=None):
   
 
 def scan_categories_by_re(limit=None):
+  firebase_user = auth.sign_in_with_email_and_password(FIREBASE_AUTH_EMAIL, FIREBASE_AUTH_PASSWORD)
   # Get categories from Firebase
   categories = database.child('categories').get()
   for cat in categories.each():
@@ -162,5 +164,5 @@ def scan_categories_by_re(limit=None):
     if 'regularExpression' in cat:
       regExpress = cat['regularExpression']
       print('==== regExpress: ', regExpress)
-      common_scan_category_by_re(cat_name, regExpress, limit=None)
+      common_scan_category_by_re(cat_name, regExpress, user_token=firebase_user['idToken'], limit=None)
     time.sleep(1)
