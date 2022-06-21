@@ -24,6 +24,8 @@ from .serializers import (
   NewCategorySerializer,
   CategoryScanFromFileSerializer
 )
+from category_tag.models import CategoryTag
+from tag.models import Tag
 from utils.ens_utils import scan_ens
 import logging
 
@@ -42,12 +44,14 @@ class CategoryList(APIView):
       Category,
       CategorySerializer,
       queries=None,
-      order_by_array=('name',)
+      order_by_array=None
     )
     return Response(resultset)
 
 
 class CategoryDetail(APIView):
+  permission_classes = []
+
   def get_object(self, pk):
     try:
       return Category.objects.get(pk=pk)
@@ -67,37 +71,52 @@ class CategoryDetail(APIView):
     responses={200: CategorySerializer(many=False)}
   )
   def put(self, request, pk, format=None):
+    tags = request.data.get('tags', [])
     item = self.get_object(pk)
     serializer = CategorySerializer(item, data=request.data)
     if serializer.is_valid():
       serializer.save()
+      # Delete all tags
+      item.ct_categories.all().delete()
+      # Save category_tags
+      for tag_name in tags:
+        tag = Tag.objects.filter(name=tag_name).first()
+        uct = CategoryTag.objects.update_or_create(category=item, tag=tag)
       return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
   def delete(self, request, pk, format=None):
     item = self.get_object(pk)
-    # Delete all patients
-    item.dentist_patients.all().delete()
     item.delete()
     return Response(status=status.HTTP_200_OK)
 
 
 class CategoryCreate(APIView):
+  permission_classes = []
+
   @swagger_auto_schema(
       request_body=NewCategorySerializer(many=False),
       responses={200: CategorySerializer(many=False)}
   )
   def post(self, request, format=None):
+    tags = request.data.get('tags', [])
+
     serializer = NewCategorySerializer(data=request.data, many=False)
     if serializer.is_valid():
       # Create new member with serializer
       new_item = Category.objects.create(**serializer.validated_data)
       new_serializer = CategorySerializer(new_item, many=False)
+      # Create category_tags
+      for tag_name in tags:
+        tag = Tag.objects.filter(name=tag_name).first()
+        uct = CategoryTag.objects.update_or_create(category=new_item, tag=tag)
       return Response(new_serializer.data, status=status.HTTP_201_CREATED)
     return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CategoryScanFromFile(APIView):
+  permission_classes = []
+
   @swagger_auto_schema(
       request_body=CategoryScanFromFileSerializer(many=False),
       responses={200: CategorySerializer(many=False)}

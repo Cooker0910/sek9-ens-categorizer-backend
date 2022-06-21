@@ -61,7 +61,6 @@ class Command(BaseCommand):
     )
     logger.info("Added job 'check_category_by_file_job'.")
 
-
     scheduler.add_job(
       check_category_by_re_job,
       trigger=CronTrigger(hour="*/4"),  # Every 4 hours

@@ -1,30 +1,18 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Category
+from .models import Domain
 
-@admin.register(Category)
-class CategoryAdmin(ImportExportModelAdmin):
+@admin.register(Domain)
+class DomainAdmin(ImportExportModelAdmin):
   fields = (
     'id',
     'name',
-    'short_name',
     'description',
-    'floor',
-    'owners',
-    'available',
-    'count',
-    'image_url',
-    'regular_expression',
-    'files',
-    'wiki_url',
-    'community_discord',
-    'community_twitter',
-    'data',
     'updated_at',
     'created_at',
   )
   lds = list(fields)
-  lds.remove('data')
+  
   list_display = lds
   readonly_fields = [
     'id',

@@ -81,6 +81,10 @@ LOCAL_APPS = [
   'authentication',
   'member',
   'category',
+  'ethereum',
+  'tag',
+  'domain',
+  'category_tag',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
