@@ -1,3 +1,4 @@
+from gettext import Catalog
 import json
 import time
 from django.utils.timezone import now
@@ -33,17 +34,32 @@ logger = logging.getLogger(__name__)
 
 class CategoryList(APIView):
   permission_classes = []
+  tag_param = openapi.Parameter(
+    'tag_param',
+    openapi.IN_QUERY,
+    description='Tag name.',
+    type=openapi.TYPE_STRING
+  )
+  paramenters = [tag_param,] + FilterPagination.generate_pagination_params()
 
   @swagger_auto_schema(
-    manual_parameters=FilterPagination.generate_pagination_params(),
+    manual_parameters=paramenters,
     responses={200: CategorySerializer(many=True)}
   )
   def get(self, request, format=None):
+    tag = request.GET.get('tag', None)
+    queries = None
+    if tag:
+      t = Tag.objects.filter(name=tag).first()
+      if t:
+        cts = t.ct_tags.all()
+        cat_ids = list(cts.values_list('category_id', flat=True))
+        queries = Q(id__in=cat_ids)
     resultset = FilterPagination.get_paniation_data(
       request,
       Category,
       CategorySerializer,
-      queries=None,
+      queries=queries,
       order_by_array=None
     )
     return Response(resultset)
@@ -131,3 +147,71 @@ class CategoryScanFromFile(APIView):
       return Response(data=res, status=status.HTTP_201_CREATED)
     return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class CategoryNewest(APIView):
+  permission_classes = []
+
+  @swagger_auto_schema(
+    manual_parameters=FilterPagination.generate_pagination_params(),
+    responses={200: CategorySerializer(many=True)}
+  )
+  def get(self, request, format=None):
+    resultset = FilterPagination.get_paniation_data(
+      request,
+      Category,
+      CategorySerializer,
+      queries=None,
+      order_by_array=None
+    )
+    return Response(resultset)
+
+class CategoryMostViewd(APIView):
+  permission_classes = []
+
+  @swagger_auto_schema(
+    manual_parameters=FilterPagination.generate_pagination_params(),
+    responses={200: CategorySerializer(many=True)}
+  )
+  def get(self, request, format=None):
+    resultset = FilterPagination.get_paniation_data(
+      request,
+      Category,
+      CategorySerializer,
+      queries=None,
+      order_by_array=None
+    )
+    return Response(resultset)
+
+class CategoryMostPurchased(APIView):
+  permission_classes = []
+
+  @swagger_auto_schema(
+    manual_parameters=FilterPagination.generate_pagination_params(),
+    responses={200: CategorySerializer(many=True)}
+  )
+  def get(self, request, format=None):
+    resultset = FilterPagination.get_paniation_data(
+      request,
+      Category,
+      CategorySerializer,
+      queries=None,
+      order_by_array=None
+    )
+    return Response(resultset)
+
+class CategoryByTag(APIView):
+  permission_classes = []
+
+  @swagger_auto_schema(
+    manual_parameters=FilterPagination.generate_pagination_params(),
+    responses={200: CategorySerializer(many=True)}
+  )
+  def get(self, request, format=None):
+    resultset = FilterPagination.get_paniation_data(
+      request,
+      Category,
+      CategorySerializer,
+      queries=None,
+      order_by_array=None
+    )
+    return Response(resultset)
