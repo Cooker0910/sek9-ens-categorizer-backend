@@ -114,7 +114,7 @@ def scan_categories():
 
 
 
-def common_scan_category_by_re(category, domain, reg_express, user_token=None, limit=None):
+def common_scan_category_by_re(category, reg_express, user_token=None, limit=None):
   # Check validation
   if (reg_express is None) or (reg_express == ''):
     return None
@@ -129,12 +129,14 @@ def common_scan_category_by_re(category, domain, reg_express, user_token=None, l
   
   # Scan eth names
   for ens_name in ens_names:
-    value = scan_ens(ens_name, skip_no_eth=True)
-    print('==== ens: ', ens_name, value)
-    # Save into firebase
-    if value is not None:
-      add_or_update_eth(category, domain, ens_name, value)
-    time.sleep(2)
+    domains = Domain.objects.all()
+    for domain in domains:
+      value = scan_ens(f"{ens_name}.{domain.name}", skip_no_eth=True)
+      print('==== ens: ', ens_name, value)
+      # Save into firebase
+      if value is not None:
+        add_or_update_eth(category, domain, ens_name, value)
+      time.sleep(2)
   return None
 
 def scan_category_by_re(category_name, limit=None):
@@ -146,16 +148,13 @@ def scan_category_by_re(category_name, limit=None):
   
 
 def scan_categories_by_re(limit=None):
-  firebase_user = auth.sign_in_with_email_and_password(FIREBASE_AUTH_EMAIL, FIREBASE_AUTH_PASSWORD)
+  # firebase_user = auth.sign_in_with_email_and_password(FIREBASE_AUTH_EMAIL, FIREBASE_AUTH_PASSWORD)
   # Get categories from Firebase
-  categories = database.child('categories').get()
-  for cat in categories.each():
-    cat_key = cat.key()
-    cat_value = cat.val()
-    cat_name = cat_value['name']
+  categories = Category.objects.all()
+  for cat in categories:
+    cat_name = cat.name
     print('\n==== Checking category: ', cat_name)
-    if 'regularExpression' in cat_value:
-      regExpress = cat_value['regularExpression']
-      print('==== regExpress: ', regExpress)
-      common_scan_category_by_re(cat_name, regExpress, user_token=firebase_user['idToken'], limit=None)
+    regExpress = cat.regular_expression
+    print('==== regExpress: ', regExpress)
+    common_scan_category_by_re(cat, regExpress, user_token=None, limit=None)
     time.sleep(1)
