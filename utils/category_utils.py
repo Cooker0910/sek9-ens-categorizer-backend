@@ -12,6 +12,7 @@ import os
 import time
 import json
 from utils import exrex
+from django.db.models import Avg, Count, Min, Sum
 from category.models import Category
 from domain.models import Domain
 from ethereum.models import Ethereum
@@ -106,6 +107,11 @@ def scan_categories():
         file_url = cf['url']
         print('=== file_url: ', file_url)
         get_names_from_remote_file(cat, file_url)
+    # Calculate summary
+    eths = cat.category_ethereums.all()
+    cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
+    cat.save()
+
 
 
 def common_scan_category_by_re(category, domain, reg_express, user_token=None, limit=None):
