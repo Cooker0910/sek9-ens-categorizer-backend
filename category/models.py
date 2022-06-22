@@ -17,6 +17,7 @@ class Category(models.Model):
   community_discord = models.CharField(max_length=256, blank=True, null=True, default=None)
   community_twitter = models.CharField(max_length=256, blank=True, null=True, default=None)
   data = models.TextField(blank=False, default="{}")
+  views = models.PositiveIntegerField(blank=True, null=True, default=0)
   updated_at = models.DateTimeField(auto_now=True)
   created_at = models.DateTimeField(auto_now_add=True)
 

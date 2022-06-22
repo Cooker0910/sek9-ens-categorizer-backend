@@ -85,6 +85,7 @@ LOCAL_APPS = [
   'tag',
   'domain',
   'category_tag',
+  'favorit',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

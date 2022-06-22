@@ -13,6 +13,7 @@ class CategoryAdmin(ImportExportModelAdmin):
     'owners',
     'available',
     'count',
+    'views',
     'image_url',
     'regular_expression',
     'files',

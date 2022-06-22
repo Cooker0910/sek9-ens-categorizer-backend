@@ -67,7 +67,7 @@ class EthereumList(APIView):
     domain_query = None
     category_query = None
     if domain_name:
-      d = Domain.objects.filter(name=domain_name).first
+      d = Domain.objects.filter(name=domain_name).first()
       if d:
         domain_query = Q(domain=d)
     if category_id:
@@ -115,6 +115,9 @@ class EthereumDetail(APIView):
     responses={200: EthereumSerializer(many=False)}
   )
   def get(self, request, pk, format=None):
+    item = self.get_object(pk)
+    item.views = item.views + 1
+    item.save()
     item = self.get_object(pk)
     serializer = EthereumSerializer(item)
     return Response(serializer.data, status=status.HTTP_200_OK)

@@ -23,6 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
       'community_discord',
       'community_twitter',
       'tags',
+      'views',
       'updated_at',
       'created_at',
     )
@@ -50,6 +51,7 @@ class NewCategorySerializer(serializers.ModelSerializer):
       'wiki_url',
       'community_discord',
       'community_twitter',
+      'views',
     )
 
 class CategoryScanFromFileSerializer(serializers.Serializer):

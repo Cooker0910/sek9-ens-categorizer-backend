@@ -79,6 +79,9 @@ class CategoryDetail(APIView):
   )
   def get(self, request, pk, format=None):
     item = self.get_object(pk)
+    item.views = item.views + 1
+    item.save()
+    item = self.get_object(pk)
     serializer = CategorySerializer(item)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

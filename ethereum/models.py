@@ -40,6 +40,7 @@ class Ethereum(models.Model):
   registration_date = models.DateTimeField(blank=True, null=True, default=None)
   starting_price = models.DecimalField(max_digits=50, decimal_places=18, blank=True, null=True, default=0.0)
   width = models.PositiveIntegerField(blank=True, null=True, default=0)
+  views = models.PositiveIntegerField(blank=True, null=True, default=0)
   data = models.TextField(blank=False, default="{}")
   updated_at = models.DateTimeField(auto_now=True)
   created_at = models.DateTimeField(auto_now_add=True)
