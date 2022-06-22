@@ -76,8 +76,6 @@ class TagDetail(APIView):
 
   def delete(self, request, pk, format=None):
     item = self.get_object(pk)
-    # Delete all patients
-    item.dentist_patients.all().delete()
     item.delete()
     return Response(status=status.HTTP_200_OK)
 
