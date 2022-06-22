@@ -61,7 +61,7 @@ def get_names_from_remote_file(category, file_url, user_token=None):
     reader = csv.reader(file)
     for row in reader:
       value = None
-      ens_name = row[0].lower().replace(' ', '-').replace('(', '').replace(')', '').replace("'", '')
+      ens_name = row[0].lower().replace(' ', '').replace('(', '').replace(')', '').replace("'", '')
       for domain in domains:
         value = scan_ens(f"{ens_name}.{domain.name}")
         print('==== ens: ', ens_name, value)
