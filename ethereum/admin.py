@@ -10,6 +10,7 @@ class EthereumAdmin(ImportExportModelAdmin):
     'name',
     'domain',
     'address',
+    'balance',
     'owner',
     'description',
     'created_date',
@@ -44,4 +45,6 @@ class EthereumAdmin(ImportExportModelAdmin):
   list_display_links = list_display
   list_per_page = 25
   sfs = list(list_display)
+  sfs.remove('category')
+  sfs.remove('domain')
   search_fields = sfs

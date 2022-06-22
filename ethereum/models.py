@@ -30,6 +30,7 @@ class Ethereum(models.Model):
   resolver = models.CharField(max_length=128, blank=True, null=True, default=None)
   registrant = models.CharField(max_length=128, blank=True, null=True, default=None)  
   expiry_date = models.DateTimeField(blank=True, null=True, default=None)
+  balance = models.DecimalField(max_digits=50, decimal_places=18, blank=True, null=True, default=0.0)
   end_price = models.DecimalField(max_digits=50, decimal_places=18, blank=True, null=True, default=0.0)
   end_date = models.DateTimeField(blank=True, null=True, default=None)
   label_hash = models.CharField(max_length=128, blank=True, null=True, default=None)
@@ -53,4 +54,4 @@ class Ethereum(models.Model):
     return f"{self.name}.{self.domain}"
   
   def eth_name(self):
-    return f"{self.name}.{self.domain}"
+    return f"{self.name}.{self.domain.name}"

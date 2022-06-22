@@ -3,6 +3,7 @@ from web3 import Web3
 # from web3.auto.infura import w3
 from ens import ENS
 import etherscan
+from decimal import Decimal
 
 # HTTP_PROVIDER = 'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/'
 # WSS_PROVIDER = 'wss://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/'
@@ -14,21 +15,21 @@ WEB3_INFURA_API_SECRET = '4efe680d7fb34fb2a8b5d8d55348d521'
 
 # Ethereum Mainnet RPC URL List
 RPC_HTTP_SERVERS = [
-  'https://main-rpc.linkpool.io',
-  'https://main-light.eth.linkpool.io',
+  # 'https://main-rpc.linkpool.io',
+  # 'https://main-light.eth.linkpool.io',
   'https://eth-mainnet.public.blastapi.io',
-  'https://rpc.ankr.com/eth',
-  'https://rpc.flashbots.net',
-  'https://api.mycryptoapi.com/eth',
-  'https://eth-rpc.gateway.pokt.network',
-  'https://cloudflare-eth.com',
-  'https://ethereumnodelight.app.runonflux.io',
-  'https://eth-mainnet.gateway.pokt.network/v1/5f3453978e354ab992c4da79',
-  'https://mainnet.eth.cloud.ava.do',	
-  'https://nodes.mewapi.io/rpc/eth',
-  'https://mainnet-nethermind.blockscout.com',
+  # 'https://rpc.ankr.com/eth',
+  # 'https://rpc.flashbots.net',
+  # 'https://api.mycryptoapi.com/eth',
+  # 'https://eth-rpc.gateway.pokt.network',
+  # 'https://cloudflare-eth.com',
+  # 'https://ethereumnodelight.app.runonflux.io',
+  # 'https://eth-mainnet.gateway.pokt.network/v1/5f3453978e354ab992c4da79',
+  # 'https://mainnet.eth.cloud.ava.do',	
+  # 'https://nodes.mewapi.io/rpc/eth',
+  # 'https://mainnet-nethermind.blockscout.com',
   ###### 
-  "https://rpc.flashbots.net/",
+  # "https://rpc.flashbots.net/",
   
   ### Paid server
   'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/',
@@ -47,35 +48,52 @@ RPC_WSS_SERVERS = [
 ETHER_SCAN_API_KEY_TOKEN = 'I9C5SCAAYXB41F9ITE4ZSEFEMP1VVCPR6A'
 
 ETH_DEFAULT_VALUE = {
-    "categories": [],
-    "tags": [],
     "name": '',
-    "labelHash": '',
-    "tokenId": "",
-    "registrant": "",
-    "registrationDate": 0,
-    "expiryDate": 0,
-    "resolver": "",
-    "owner": '',
-    "subcategory": 0,
-    "width": 0,
-    "createdAt": '',
-    "updatedAt": '',
-    "auctionType": "none",
-    "createdDate": 0,
-    "endDate": 0,
-    "endingPrice": 0,
-    "endingPrice_decimal": 0,
-    "lastSale": 0,
-    "lastSaleDate": 0,
-    "lastSalePaymentToken": "",
-    "lastSale_decimal": 0,
-    "paymentToken": '',
-    "startingPrice": '',
-    "startingPrice_decimal": 0,
-    "balance": 0,
-    "objectId": ''
+    'address': None,
+    'owner': None,
+    'description': None,
+    'created_date': None,
+    'resolver': None,
+    'registrant': None,
+    'registration_date': None,
+    'expiry_date': None,
+    'starting_price': 0,
+    'end_price': 0,
+    'end_date': None,
+    'label_hash': None,
+    'payment_token': None,
+    'last_sale': 0,
+    'width': 0,
+    'balance' : 0
+    
+    # "labelHash": '',
+    # "tokenId": "",
+    # "registrant": "",
+    # "registrationDate": 0,
+    # "expiryDate": 0,
+    # "resolver": "",
+    # "owner": '',
+    # "subcategory": 0,
+    # "width": 0,
+    # "createdAt": '',
+    # "updatedAt": '',
+    # "auctionType": "none",
+    # "createdDate": 0,
+    # "endDate": 0,
+    # "endingPrice": 0,
+    # "endingPrice_decimal": 0,
+    # "lastSale": 0,
+    # "lastSaleDate": 0,
+    # "lastSalePaymentToken": "",
+    # "lastSale_decimal": 0,
+    # "paymentToken": '',
+    # "startingPrice": '',
+    # "startingPrice_decimal": 0,
+    # "balance": 0,
+    # "objectId": ''
   }
+
+  
 
 ethScan = etherscan.Client(
     api_key=ETHER_SCAN_API_KEY_TOKEN,
@@ -150,7 +168,6 @@ def scan_ens(name, skip_no_eth=False):
   # Filled out the result into the firebase db]
   cur_time = datetime.now()
   str_now = cur_time.strftime("%Y-%m-%dT%H:%M:%S.%sZ")
-
   
   try:
     resolver = ns.resolver(eth_name)
@@ -168,13 +185,13 @@ def scan_ens(name, skip_no_eth=False):
     owner = ns.owner(eth_name)
     print('==== owner: ', owner)
     balance = w3.eth.get_balance(eth_address)
+    balance = round(Decimal(balance) / pow(10, 18), 18)
     print('==== balance: ', balance)
   except Exception as error:
     print('==== Failed to get the detail values: ', error)
 
-  eth_values['labelHash'] = eth_address
+  eth_values['address'] = eth_address
+  eth_values['label_hash'] = eth_address
   eth_values['owner'] = owner
-  eth_values['createdAt'] = str_now
-  eth_values['updatedAt'] = str_now
-  eth_values['balance'] = balance
+  eth_values['balance'] = str(balance)
   return eth_values
