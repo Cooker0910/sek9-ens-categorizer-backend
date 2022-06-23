@@ -158,7 +158,7 @@ def scan_ens(name, skip_no_eth=False):
   # eth_name = f'{name}.eth'
   eth_name = name
   tmp_names = name.split('.')
-  if tmp_names[-1] != 'eth':
+  if len(tmp_names) == 0:
     eth_name = f'{name}.eth'
 
   eth_address, w3, ns = get_eth_address(eth_name)
