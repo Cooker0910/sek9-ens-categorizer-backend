@@ -67,6 +67,9 @@ urlpatterns = [
     re_path(r'^api/v1/ethereum/', include('ethereum.urls')),
     re_path(r'^api/v1/category_tag/', include('category_tag.urls')),
     re_path(r'^api/v1/favorit/', include('favorit.urls')),
+    re_path(r'^api/v1/newsletter/', include('newsletter.urls')),
+    re_path(r'^api/v1/feedback/', include('feedback.urls')),
+    re_path(r'^api/v1/feedback_answer/', include('feedback_answer.urls')),
     # Default url
     re_path(r'^$', api_home, name='api_home'),
 ]
