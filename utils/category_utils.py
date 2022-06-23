@@ -76,15 +76,11 @@ def get_category_by_name(category_name):
   return Category.objects.filter(name=category_name).first()
 
 
-def scan_category(category_name):
-  # Get categories from Firebase
-  category = Category.objects.filter(name=category_name).first()
-  if category is None:
-    print(f"==== The category {category_name} don't exist")
-    return
+def common_scan_category(category):
   cat_files = category.files
   if cat_files is None:
     return
+  print('\n==== Checking category: ', category.name)
   for cf in cat_files:
     print('=== cf: ', cf)
     if ('url' in cf) and cf['url']:
@@ -94,24 +90,39 @@ def scan_category(category_name):
     time.sleep(1)  
   time.sleep(1)
 
+def scan_category(category_name):
+  # Get categories from Firebase
+  category = Category.objects.filter(name=category_name).first()
+  if category is None:
+    print(f"==== The category {category} don't exist")
+    return
+  common_scan_category(category)
+
+def scan_category_by_id(category_id):
+  category = Category.objects.filter(id=category_id).first()
+  if category is None:
+    print(f"==== The category {category_id} don't exist")
+    return
+  common_scan_category(category)
+
 def scan_categories():
   categories = Category.objects.all()
   for cat in categories:
-    cat_files = cat.files
-    print('\n==== Checking category: ', cat.name)
-    if cat_files is None:
-      continue
-    for cf in cat_files:
-      print('=== cf: ', cf)
-      if ('url' in cf) and cf['url']:
-        file_url = cf['url']
-        print('=== file_url: ', file_url)
-        get_names_from_remote_file(cat, file_url)
+    common_scan_category(cat)
+    # cat_files = cat.files
+    # print('\n==== Checking category: ', cat.name)
+    # if cat_files is None:
+    #   continue
+    # for cf in cat_files:
+    #   print('=== cf: ', cf)
+    #   if ('url' in cf) and cf['url']:
+    #     file_url = cf['url']
+    #     print('=== file_url: ', file_url)
+    #     get_names_from_remote_file(cat, file_url)
     # Calculate summary
     eths = cat.category_ethereums.all()
     cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
     cat.save()
-
 
 
 def common_scan_category_by_re(category, reg_express, user_token=None, limit=None):
