@@ -158,6 +158,11 @@ Dentist Backend
 		./manage.py scan_category
 		```
 
+	3. `scan_category_by_id`
+		```
+		$ docker exec sek9-backend python manage.py scan_category_by_id --id 4 &
+		```
+
 ### Database backup and restore
 
 	1. Backup

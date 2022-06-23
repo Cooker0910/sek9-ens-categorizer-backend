@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 from web3 import Web3
 # from web3.auto.infura import w3
 from ens import ENS
@@ -125,7 +126,6 @@ def get_eth_address(name):
   # Try to get with HTTP servers
   providers = []
   for rpc in RPC_HTTP_SERVERS:
-    
     try:
       print('==== trying to connect to a http rpc server: ', rpc)
       provider = Web3.HTTPProvider(rpc)
@@ -135,6 +135,8 @@ def get_eth_address(name):
         return eth_address, w3, ns
     except Exception as error:
       print('==== Failed the get the address: get_eth_address(): ', error)
+    
+    time.sleep(2)
 
   # Try to get with websocket servers
   for rpc in RPC_WSS_SERVERS:
@@ -146,6 +148,7 @@ def get_eth_address(name):
         return eth_address, w3, ns
     except Exception as error:
       print('==== Failed the get the address: get_eth_address(): ', error)
+    time.sleep(2)
   return None, None, None
 
 def scan_ens(name, skip_no_eth=False):
