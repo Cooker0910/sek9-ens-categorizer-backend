@@ -1,4 +1,5 @@
 import logging
+import time
 from django.conf import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -41,6 +42,7 @@ def check_category_balance():
     cat.floor = balance
     cat.save()
     print(f'==== category = {cat.name}, balance = {balance}')
+    time.sleep(3)
   return
 
 
