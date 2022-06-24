@@ -7,6 +7,8 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 from django.db.models import Q
+from django.db.models import Avg, Count, Min, Sum
+from category.models import Category
 from utils.category_utils import (
   scan_categories,
   scan_categories_by_re
@@ -27,6 +29,16 @@ def check_category_by_re_job():
   # Your job processing logic here...
   print('==== run check_category_by_re_job.')
   scan_categories_by_re()
+  return
+
+def check_category_balance():
+  # Your job processing logic here...
+  print('==== run check_category_balance.')
+  categories = Category.objects.all()
+  for cat in categories:
+    eths = cat.category_ethereums.all()
+    cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
+    cat.save()
   return
 
 
@@ -54,7 +66,7 @@ class Command(BaseCommand):
 
     scheduler.add_job(
       check_category_by_file_job,
-      trigger=CronTrigger(hour="*/2"),  # Every 2 hours
+      trigger=CronTrigger(hour="*/8"),  # Every 2 hours
       id="check_category_by_file_job",  # The `id` assigned to each job MUST be unique
       max_instances=1,
       replace_existing=True,
@@ -63,12 +75,22 @@ class Command(BaseCommand):
 
     scheduler.add_job(
       check_category_by_re_job,
-      trigger=CronTrigger(hour="*/4"),  # Every 4 hours
-      id="check_category_by_re_job",  # The `id` assigned to each job MUST be unique
+      trigger=CronTrigger(hour="*/12"),
+      id="check_category_by_re_job",
       max_instances=1,
       replace_existing=True,
     )
     logger.info("Added job 'check_category_by_re_job'.")
+
+    check_category_balance
+    scheduler.add_job(
+      check_category_balance,
+      trigger=CronTrigger(hour="*/1"),
+      id="check_category_balance",  # The `id` assigned to each job MUST be unique
+      max_instances=1,
+      replace_existing=True,
+    )
+    logger.info("Added job 'check_category_balance'.")
 
     scheduler.add_job(
       delete_old_job_executions,
