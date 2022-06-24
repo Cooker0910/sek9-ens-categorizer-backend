@@ -138,18 +138,19 @@ def get_eth_address(name):
     
     time.sleep(2)
 
-  # Try to get with websocket servers
-  for rpc in RPC_WSS_SERVERS:
-    try:
-      print('==== trying to connect to a wss rpc server: ', rpc)
-      provider = Web3.WebsocketProvider(rpc)
-      eth_address, w3, ns = get_eth_address_by_provider(provider, name)
-      if eth_address:
-        return eth_address, w3, ns
-    except Exception as error:
-      print('==== Failed the get the address: get_eth_address(): ', error)
-    time.sleep(2)
-  return None, None, None
+  # Disable websocket usage for now to improve performance
+  # # Try to get with websocket servers
+  # for rpc in RPC_WSS_SERVERS:
+  #   try:
+  #     print('==== trying to connect to a wss rpc server: ', rpc)
+  #     provider = Web3.WebsocketProvider(rpc)
+  #     eth_address, w3, ns = get_eth_address_by_provider(provider, name)
+  #     if eth_address:
+  #       return eth_address, w3, ns
+  #   except Exception as error:
+  #     print('==== Failed the get the address: get_eth_address(): ', error)
+  #   time.sleep(2)
+  # return None, None, None
 
 def scan_ens(name, skip_no_eth=False):
   eth_values = ETH_DEFAULT_VALUE.copy()

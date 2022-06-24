@@ -59,16 +59,19 @@ def get_names_from_remote_file(category, file_url, user_token=None):
   domains = Domain.objects.all()
   with open('tmp.csv', 'r') as file:
     reader = csv.reader(file)
+    index = 1
     for row in reader:
       value = None
       ens_name = row[0].lower().replace(' ', '').replace('(', '').replace(')', '').replace("'", '')
       for domain in domains:
+        print(f'==== category = {category.name}, domain = {domain.name}')
         value = scan_ens(f"{ens_name}.{domain.name}")
-        print('==== ens: ', ens_name, value)
+        print(f'==== {index}: ens = {ens_name}, value = {value}')
         # Save into firebase
         add_or_update_eth(category, domain, ens_name, value)
-        time.sleep(1)
-      time.sleep(2)
+        time.sleep(2)
+      index = index + 1
+      time.sleep(3)
   os.remove('tmp.csv')
 
 
@@ -123,6 +126,7 @@ def scan_categories():
     eths = cat.category_ethereums.all()
     cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
     cat.save()
+    time.sleep(3)
 
 
 def common_scan_category_by_re(category, reg_express, user_token=None, limit=None):
@@ -148,6 +152,7 @@ def common_scan_category_by_re(category, reg_express, user_token=None, limit=Non
       if value is not None:
         add_or_update_eth(category, domain, ens_name, value)
       time.sleep(2)
+    time.sleep(3)
   return None
 
 def scan_category_by_re(category_name, limit=None):
@@ -167,5 +172,5 @@ def scan_categories_by_re(limit=None):
     print('\n==== Checking category: ', cat_name)
     regExpress = cat.regular_expression
     print('==== regExpress: ', regExpress)
-    common_scan_category_by_re(cat, regExpress, user_token=None, limit=None)
-    time.sleep(1)
+    common_scan_category_by_re(cat, regExpress, user_token=None, limit=1000)
+    time.sleep(5)
