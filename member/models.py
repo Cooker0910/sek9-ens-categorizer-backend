@@ -33,7 +33,7 @@ class Member(models.Model):
   sex = models.CharField(choices=SEX_CHOICE, max_length=10, blank=True, null=True, default=None)
   telnumber = models.CharField(max_length=40, blank=True, null=True, default=None)
   birth_date = models.DateField(blank=True, null=True, default=None)
-  image = models.CharField(max_length=1024, blank=False)
+  image = models.CharField(max_length=1024, blank=True, null=True, default=None)
   password = models.CharField(max_length=128, blank=False, validators=[MinLengthValidator(6)])
   active_notification = models.BooleanField(blank=False, default=True)
   confirmed = models.BooleanField(blank=False, default=False)

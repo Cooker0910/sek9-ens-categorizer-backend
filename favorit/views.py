@@ -53,7 +53,7 @@ class FavoritList(APIView):
       Favorit,
       FavoritSerializer,
       queries=queries,
-      order_by_array=('member', 'ethereum')
+      order_by_array=None
     )
     return Response(resultset)
 
@@ -71,7 +71,7 @@ class FavoritListByCategoryId(APIView):
       Favorit,
       FavoritSerializer,
       queries=None,
-      order_by_array=('name',)
+      order_by_array=None
     )
     return Response(resultset)
 
