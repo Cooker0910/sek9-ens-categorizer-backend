@@ -79,7 +79,7 @@ class EthereumList(APIView):
       Ethereum,
       EthereumSerializer,
       queries=queries,
-      order_by_array=('name',)
+      order_by_array=None
     )
     return Response(resultset)
 
@@ -97,7 +97,7 @@ class EthereumListByCategoryId(APIView):
       Ethereum,
       EthereumSerializer,
       queries=None,
-      order_by_array=('name',)
+      order_by_array=None
     )
     return Response(resultset)
 

@@ -40,7 +40,7 @@ class FeedbackAnswerList(APIView):
       FeedbackAnswer,
       FeedbackAnswerSerializer,
       queries=None,
-      order_by_array=('name',)
+      order_by_array=None
     )
     return Response(resultset)
 
