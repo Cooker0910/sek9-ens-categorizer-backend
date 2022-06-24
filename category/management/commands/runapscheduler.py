@@ -37,8 +37,10 @@ def check_category_balance():
   categories = Category.objects.all()
   for cat in categories:
     eths = cat.category_ethereums.all()
-    cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
+    balance = eths.aggregate(Sum('balance'))['balance__sum']
+    cat.floor = balance
     cat.save()
+    print(f'==== category = {cat.name}, balance = {balance}')
   return
 
 
