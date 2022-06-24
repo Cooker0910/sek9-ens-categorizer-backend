@@ -16,9 +16,10 @@ WEB3_INFURA_API_SECRET = '4efe680d7fb34fb2a8b5d8d55348d521'
 
 # Ethereum Mainnet RPC URL List
 RPC_HTTP_SERVERS = [
+  ### Free servers
   # 'https://main-rpc.linkpool.io',
   # 'https://main-light.eth.linkpool.io',
-  'https://eth-mainnet.public.blastapi.io',
+  # 'https://eth-mainnet.public.blastapi.io',
   # 'https://rpc.ankr.com/eth',
   # 'https://rpc.flashbots.net',
   # 'https://api.mycryptoapi.com/eth',
@@ -32,7 +33,7 @@ RPC_HTTP_SERVERS = [
   ###### 
   # "https://rpc.flashbots.net/",
   
-  ### Paid server
+  ### Paid servers
   'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/',
   'https://mainnet.infura.io/v3/aa2115adfe164f49a77fe6c38c754bc9',
   'https://mainnet.infura.io/v3/32718f747eb24dcfb487db93a8421089',
