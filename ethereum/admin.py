@@ -13,6 +13,7 @@ class EthereumAdmin(ImportExportModelAdmin):
     'balance',
     'views',
     'owner',
+    'owners',
     'description',
     'created_date',
     'registration_date',

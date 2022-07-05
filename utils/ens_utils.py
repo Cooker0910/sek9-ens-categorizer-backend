@@ -4,7 +4,9 @@ from web3 import Web3
 # from web3.auto.infura import w3
 from ens import ENS
 import etherscan
+from opensea import OpenseaAPI
 from decimal import Decimal
+from django.conf import settings
 
 # HTTP_PROVIDER = 'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/'
 # WSS_PROVIDER = 'wss://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/'
@@ -47,12 +49,13 @@ RPC_WSS_SERVERS = [
   'wss://2AMdtnynf5Wi4UkCZhnbzXiLC7L:ee6b63e240262cd8f215a0f53fb6d455@eth2-beacon-mainnet.infura.io'
 ]
 
-ETHER_SCAN_API_KEY_TOKEN = 'I9C5SCAAYXB41F9ITE4ZSEFEMP1VVCPR6A'
+# ETHER_SCAN_API_KEY_TOKEN = 'I9C5SCAAYXB41F9ITE4ZSEFEMP1VVCPR6A'
 
 ETH_DEFAULT_VALUE = {
     "name": '',
     'address': None,
     'owner': None,
+    'owners': 0,
     'description': None,
     'created_date': None,
     'resolver': None,
@@ -66,7 +69,8 @@ ETH_DEFAULT_VALUE = {
     'payment_token': None,
     'last_sale': 0,
     'width': 0,
-    'balance' : 0
+    'balance' : 0,
+    'owners': 0,
     
     # "labelHash": '',
     # "tokenId": "",
@@ -98,10 +102,12 @@ ETH_DEFAULT_VALUE = {
   
 
 ethScan = etherscan.Client(
-    api_key=ETHER_SCAN_API_KEY_TOKEN,
+    api_key=settings.ETHER_SCAN_API_KEY_TOKEN,
     cache_expire_after=5,
 )
 print('==== ethScan: ', ethScan)
+
+opensea = OpenseaAPI(apikey=settings.OPENSEA_API_KEY)
 
 def get_eth_address_by_provider(providers, name):
   try:
@@ -186,17 +192,26 @@ def scan_ens(name, skip_no_eth=False):
   # Get eth detail values
   owner = ''
   balance = 0
+  owners = 0
   try:
     owner = ns.owner(eth_name)
     print('==== owner: ', owner)
     balance = w3.eth.get_balance(eth_address)
     balance = round(Decimal(balance) / pow(10, 18), 18)
     print('==== balance: ', balance)
+    owners = 1 if owner is not None else 0
   except Exception as error:
     print('==== Failed to get the detail values: ', error)
+
+  try:
+    owner_assets = opensea.assets(owner=owner, limit=50)
+    owners = len(owners)
+  except Exception as error:
+    print('==== Failed to get the owners: ', error)
 
   eth_values['address'] = eth_address
   eth_values['label_hash'] = eth_address
   eth_values['owner'] = owner
   eth_values['balance'] = str(balance)
+  eth_values['owners'] = owners
   return eth_values

@@ -23,6 +23,19 @@ def is_existing_value(category, domain, eth_name):
   eth = Ethereum.objects.filter(category=category, domain=domain, name=eth_name).first()
   return eth
 
+def repaire_category_balance(category):
+  eths = category.category_ethereums.all()
+  balance = eths.aggregate(Sum('balance'))['balance__sum']
+  owners = eths.aggregate(Sum('owners'))['owners__sum'] #eths.filter(owner__isnull=False, owner__regex = r"\S+").all().count()
+  available = eths.filter(address__isnull=False, owner__regex = r"\S+").count()
+  count = eths.count()
+  category.floor = balance if balance else 0
+  category.owners = owners if owners else 0
+  category.available = available
+  category.count = count
+  category.save()
+  print(f'==== category={category.name}, balance={category.floor}, owners={category.owners}, available/count={available}/{count}')
+
 def add_or_update_eth(category, domain, ens_name, value, user_token=None):
   try:
     new_values = value
@@ -112,20 +125,7 @@ def scan_categories():
   categories = Category.objects.all()
   for cat in categories:
     common_scan_category(cat)
-    # cat_files = cat.files
-    # print('\n==== Checking category: ', cat.name)
-    # if cat_files is None:
-    #   continue
-    # for cf in cat_files:
-    #   print('=== cf: ', cf)
-    #   if ('url' in cf) and cf['url']:
-    #     file_url = cf['url']
-    #     print('=== file_url: ', file_url)
-    #     get_names_from_remote_file(cat, file_url)
-    # Calculate summary
-    eths = cat.category_ethereums.all()
-    cat.floor = eths.aggregate(Sum('balance'))['balance__sum']
-    cat.save()
+    repaire_category_balance(cat)
     time.sleep(3)
 
 

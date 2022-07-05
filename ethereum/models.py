@@ -35,6 +35,7 @@ class Ethereum(models.Model):
   end_date = models.DateTimeField(blank=True, null=True, default=None)
   label_hash = models.CharField(max_length=128, blank=True, null=True, default=None)
   owner = models.CharField(max_length=128, blank=True, null=True, default=None)
+  owners = models.PositiveIntegerField(blank=True, null=True, default=0)
   payment_token = models.CharField(max_length=128, blank=True, null=True, default=None)
   last_sale = models.DecimalField(max_digits=50, decimal_places=18, blank=True, null=True, default=0.0)
   registration_date = models.DateTimeField(blank=True, null=True, default=None)

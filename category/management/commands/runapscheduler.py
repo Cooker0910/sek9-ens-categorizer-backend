@@ -12,7 +12,8 @@ from django.db.models import Avg, Count, Min, Sum
 from category.models import Category
 from utils.category_utils import (
   scan_categories,
-  scan_categories_by_re
+  scan_categories_by_re,
+  repaire_category_balance
 )
 
 
@@ -37,12 +38,8 @@ def check_category_balance():
   print('==== run check_category_balance.')
   categories = Category.objects.all()
   for cat in categories:
-    eths = cat.category_ethereums.all()
-    balance = eths.aggregate(Sum('balance'))['balance__sum']
-    cat.floor = balance
-    cat.save()
-    print(f'==== category = {cat.name}, balance = {balance}')
-    time.sleep(3)
+    repaire_category_balance(cat)
+    time.sleep(1)
   return
 
 
