@@ -4,7 +4,7 @@ docker stop sek9-backend
 
 yes | docker system prune
 
-git pull origin main
+# git pull origin main
 
 docker build -t sek9-backend . -f Dockerfile
 
