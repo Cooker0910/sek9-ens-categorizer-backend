@@ -36,10 +36,10 @@ RPC_HTTP_SERVERS = [
   # "https://rpc.flashbots.net/",
   
   ### Paid servers
-  'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/',
+  # 'https://empty-wandering-snow.quiknode.pro/df2c575d8e4b307abf98baa782daa79da3b48322/',
   'https://mainnet.infura.io/v3/aa2115adfe164f49a77fe6c38c754bc9',
   'https://mainnet.infura.io/v3/32718f747eb24dcfb487db93a8421089',
-  'https://2AMdtnynf5Wi4UkCZhnbzXiLC7L:ee6b63e240262cd8f215a0f53fb6d455@eth2-beacon-mainnet.infura.io',
+  # 'https://2AMdtnynf5Wi4UkCZhnbzXiLC7L:ee6b63e240262cd8f215a0f53fb6d455@eth2-beacon-mainnet.infura.io',
 ]
 
 RPC_WSS_SERVERS = [
@@ -114,10 +114,11 @@ def get_eth_address_by_provider(providers, name):
     w3 = Web3(providers)
     # w3 = Web3(Web3.WebsocketProvider(WSS_PROVIDER))
     isConnected = w3.isConnected()
-    print('==== isConnected: ', isConnected)
+    print('==== isConnected ->: ', isConnected)
     
     if isConnected:
       ns = ENS.fromWeb3(w3)
+      print('ns', ns)
       # Try to scan
       eth_name = name
       

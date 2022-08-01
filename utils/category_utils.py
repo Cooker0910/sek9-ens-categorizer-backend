@@ -77,7 +77,7 @@ def get_names_from_remote_file(category, file_url, user_token=None):
       value = None
       ens_name = row[0].lower().replace(' ', '').replace('(', '').replace(')', '').replace("'", '')
       for domain in domains:
-        print(f'==== category = {category.name}, domain = {domain.name}')
+        print(f'==== category = {category.name}, domain = {domain.name}, ens_name = {ens_name}')
         value = scan_ens(f"{ens_name}.{domain.name}")
         print(f'==== {index}: ens = {ens_name}, value = {value}')
         # Save into firebase
